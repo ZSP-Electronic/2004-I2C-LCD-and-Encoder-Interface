@@ -11,7 +11,7 @@ These scripts use the Adafruit BBIO Encoder interface. Follow the steps to set u
 * LCD Screen
   * P9_19 SCL
   * P9_20 SDA
-* Encoder
+* Encoder using eQEP2
   * P8_10 for button
   * P8_11 DT
   * P8_12 CLK
