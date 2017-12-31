@@ -70,9 +70,9 @@ class ROT_LCD():
     def intro_lcd(self):
         lcd.clear()
         lcd.move_to(4,1)
-        lcd.putstr('Wave TechUHF')
+        lcd.putstr('This is Intro Screen')
         lcd.move_to(6,2)
-        lcd.putstr('UHF Hub')
+        lcd.putstr('Stuff Here')
         
     def main(self,prime):
         self.prime = prime
