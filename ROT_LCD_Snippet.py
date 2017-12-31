@@ -16,7 +16,5 @@ while True:
     
     if time.time() - old_time > 20:
         print('Recording')
-        rotlcd.HackRF_recordOn()
         time.sleep(7)
-        rotlcd.HackRF_recordOff()
         old_time = time.time()
