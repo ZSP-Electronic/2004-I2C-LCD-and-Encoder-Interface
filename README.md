@@ -54,3 +54,12 @@ rotlcd.get_Sample_Rate()
 rotlcd.RestartTime(Time)
   * Determines if old time will be used to reset time.
   * Used is making a function run ever segment of time
+
+## To Dos:
+* Correct sample rate to change 2^n increments
+* Add animation to intro screen
+* Implement Internet Options and Other
+* Improve Stability and reliability
+* Reduce script size if possible
+* Add write function to correct range for spectrum
+* Improve lcd_api to allow build-in characters for lcd 
