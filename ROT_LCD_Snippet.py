@@ -1,8 +1,7 @@
 from LCD_RotaryR2 import ROT_LCD
 import time
 
-
-Sf = 420e6
+Sf = 420.0125e6
 Ff = 512e6
 samprate = 2.048e6
 rotlcd = ROT_LCD()
@@ -16,5 +15,10 @@ while True:
     
     if time.time() - old_time > 20:
         print('Recording')
+        stfreq,ffreq,samplerate = rotlcd.get_Parameters()
+        print(stfreq,ffreq,samplerate)
+        rotlcd.recordOn()
         time.sleep(7)
+        print('Stop Recording')
+        rotlcd.recordOff()
         old_time = time.time()

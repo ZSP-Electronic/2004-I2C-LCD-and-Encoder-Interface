@@ -70,9 +70,9 @@ class ROT_LCD():
     def intro_lcd(self):
         lcd.clear()
         lcd.move_to(4,1)
-        lcd.putstr('This is Intro Screen')
+        lcd.putstr('Wave TechUHF')
         lcd.move_to(6,2)
-        lcd.putstr('Stuff Here')
+        lcd.putstr('UHF Hub')
         
     def main(self,prime):
         self.prime = prime
@@ -493,16 +493,13 @@ class ROT_LCD():
         self.finishstr = str(End_Frequency/1000000)
         self.sample_rate = str(int(sample_rate))
         
-    def get_Range(self):
-        return int(self.startf), int(self.finishf)
-        
-    def get_Sample_Rate(self):
-        return int(self.sample_rate)
+    def get_Parameters(self):
+        return int(self.startf), int(self.finishf), int(self.sample_rate)
         
     def correctRange(self):
         pass
     
-    def HackRF_recordOn(self):
+    def recordOn(self):
         lcd.custom_char(0,customChar.numBLK('TLon'))
         lcd.custom_char(1,customChar.numBLK('Tron'))
         lcd.custom_char(2,customChar.numBLK('BLon'))
@@ -516,7 +513,7 @@ class ROT_LCD():
             lcd.putchar(chr(2))
             lcd.putchar(chr(3))
             
-    def HackRF_recordOff(self):
+    def recordOff(self):
         lcd.custom_char(0,customChar.numBLK('TLoff'))
         lcd.custom_char(1,customChar.numBLK('TRoff'))
         lcd.custom_char(2,customChar.numBLK('BLoff'))
