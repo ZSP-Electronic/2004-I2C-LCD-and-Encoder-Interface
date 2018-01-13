@@ -54,8 +54,6 @@ class ROT_LCD():
         self.page = 0
         self.lastTime = 0
         self.Old_time = 0
-        self.prime = False
-        self.void_prime = False
         self.intro_lcd()
         time.sleep(3)
         lcd.clear()
@@ -73,28 +71,6 @@ class ROT_LCD():
         lcd.putstr('Wave TechUHF')
         lcd.move_to(6,2)
         lcd.putstr('UHF Hub')
-        
-    def main(self,prime):
-        self.prime = prime
-        lcd.clear()
-        while True:
-            if self.page == 0:
-                self.DrawScreen('Main Screen')
-            if GPIO.event_detected(ROT_SW):
-                self.page = 1
-                #time.sleep(0.2)
-                self.DrawScreen('Settings')
-                self.loop()
-                
-    def void_main(self,prime):
-        self.void_prime = prime
-        if self.page == 0:
-            self.DrawScreen('Main Screen')
-        if GPIO.event_detected(ROT_SW):
-            self.page = 1
-            #time.sleep(0.2)
-            self.DrawScreen('Settings')
-            self.loop()
 
     def DrawScreen(self, screen, fFunction = 0):
         if screen == 'Main Screen':
@@ -178,6 +154,14 @@ class ROT_LCD():
             pass
         if screen == 'Other':
             pass
+        
+    def main(self):
+        self.DrawScreen('Main Screen')
+        if GPIO.event_detected(ROT_SW):
+            self.page = 1
+            #time.sleep(0.2)
+            self.DrawScreen('Settings')
+            self.loop()
                 
     def loop(self):
         myEncoder.zero()
@@ -188,6 +172,7 @@ class ROT_LCD():
             if GPIO.event_detected(ROT_SW):
                 if self.data == 0:
                     self.page = 0
+                    self.Old_time = time.time()
                     print('Page 0')
                 if self.data == 1:
                     self.page = 2
@@ -199,13 +184,7 @@ class ROT_LCD():
             time.sleep(.1)
         if self.page == 0:
             lcd.clear()
-            if self.prime == True:
-                print('Main')
-                self.main(True)
-            if self.void_prime == True:
-                print('Void Main')
-                self.Old_time = time.time()
-                self.void_main(True)
+            self.main()
         if self.page == 2:
             self.FreqSettings()
         
@@ -363,13 +342,14 @@ class ROT_LCD():
                     
             
     '''Read Encoder to get the position stored in self.data'''    
-    def ReadEncoder(self, lcd_Col, start = 0, finish = 0, Fsetter = False, horizontal = False):
+    def ReadEncoder(self, lcd_Col, start = 0, finish = 0, numitems = 4, Fsetter = False, horizontal = False):
+        numitems -= 1
         if (Fsetter == False) & (horizontal == False):
             self.cur_position = myEncoder.position
             if (self.cur_position - 3) >= self.last_pos:
                 self.data += 1
-                if self.data > 3:
-                    self.data = 3
+                if self.data > numitems:
+                    self.data = numitems
                 if self.data != self.last_data:
                     lcd.clearCol(lcd_Col)
                     self.lastTime = time.time()
@@ -380,7 +360,7 @@ class ROT_LCD():
             if (self.cur_position + 3) <= self.last_pos:
                 self.data -= 1
                 if self.data < 0:
-                    self.data = 1
+                    self.data = 0
                 if self.data != self.last_data:
                     lcd.clearCol(lcd_Col)
                     self.lastTime = time.time()
@@ -396,12 +376,6 @@ class ROT_LCD():
                     self.Old_time = time.time()
                     lcd.clear()
                     self.page = 0
-                    if self.prime == True:
-                        print('Main')
-                        self.main(True)
-                    else:
-                        print('Void Main')
-                        self.void_main(True)
                         
         if (Fsetter == True) & (horizontal == False):
             self.cur_position = myEncoder.position
@@ -435,12 +409,6 @@ class ROT_LCD():
                     self.Old_time = time.time()
                     lcd.clear()
                     self.page = 0
-                    if self.prime == True:
-                        print('Main')
-                        self.main(True)
-                    else:
-                        print('Void Main')
-                        self.void_main(True)
                         
         if (Fsetter == False) & (horizontal == True):
             self.cur_position = myEncoder.position
@@ -539,4 +507,5 @@ if __name__ == "__main__":
     samprate = 2.048e6
     rotlcd = ROT_LCD()
     rotlcd.setParameters(Sf,Ff,samprate)
-    rotlcd.main(True)
+    while True:
+        rotlcd.main()
